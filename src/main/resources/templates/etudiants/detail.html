@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Détail Étudiant</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="app-shell">
+    <div th:replace="~{fragments/sidebar :: sidebar('etudiants')}"></div>
+
+    <main class="main-content">
+        <div class="page-header fade-in">
+            <div>
+                <h1><i class="bi bi-person-circle text-primary me-1"></i> <span th:text="${etudiant.prenom} + ' ' + ${etudiant.nom}"></span></h1>
+                <div class="subtitle">
+                    Matricule : <strong th:text="${etudiant.matricule}"></strong> ·
+                    <span th:text="${etudiant.email}"></span> ·
+                    Né(e) le <span th:text="${etudiant.dateNaissance}"></span>
+                </div>
+            </div>
+            <a href="/etudiants" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Retour</a>
+        </div>
+
+        <h5 class="mb-3 fade-in"><i class="bi bi-book"></i> Cours inscrits</h5>
+        <div class="table-card fade-in">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Cours</th>
+                        <th>Date d'inscription</th>
+                        <th>Moyenne</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="inscription : ${etudiant.inscriptions}">
+                        <td th:text="${inscription.cours.intitule}"></td>
+                        <td th:text="${inscription.dateInscription}"></td>
+                        <td>
+                            <span th:if="${inscription.moyenne} != null"
+                                  th:class="${inscription.moyenne >= 14} ? 'badge-soft success' : (${inscription.moyenne >= 10} ? 'badge-soft warning' : 'badge-soft danger')"
+                                  th:text="${#numbers.formatDecimal(inscription.moyenne, 1, 2)} + '/20'"></span>
+                            <span th:unless="${inscription.moyenne} != null" class="badge-soft neutral">Pas encore notée</span>
+                        </td>
+                        <td class="text-end">
+                            <a th:href="@{/notes/inscription/{id}(id=${inscription.id})}" class="btn btn-icon btn-outline-primary" title="Voir les notes"><i class="bi bi-journal-text"></i></a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="empty-state" th:if="${#lists.isEmpty(etudiant.inscriptions)}">
+                    <i class="bi bi-book"></i>
+                    <p class="mb-0">Aucune inscription</p>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/app.js}"></script>
+</body>
+</html>

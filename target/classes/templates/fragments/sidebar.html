@@ -1,0 +1,85 @@
+<div th:fragment="sidebar(active)" xmlns:sec="http://www.thymeleaf.org">
+
+    <!-- Barre mobile -->
+    <div class="mobile-topbar">
+        <div class="brand"><i class="bi bi-mortarboard-fill"></i> Gestion Scolaire</div>
+        <button class="sidebar-toggle-btn" id="sidebarToggle" type="button" aria-label="Ouvrir le menu">
+            <i class="bi bi-list"></i>
+        </button>
+    </div>
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <i class="bi bi-mortarboard-fill"></i>
+            <span>Gestion Scolaire</span>
+        </div>
+
+        <div class="sidebar-section-label">Menu</div>
+        <nav class="sidebar-nav">
+            <a href="/" class="sidebar-link" th:classappend="${active} == 'dashboard' ? 'active'">
+                <i class="bi bi-speedometer2"></i><span>Dashboard</span>
+            </a>
+            <a href="/etudiants" class="sidebar-link" th:classappend="${active} == 'etudiants' ? 'active'">
+                <i class="bi bi-people-fill"></i><span>Étudiants</span>
+            </a>
+            <a href="/cours" class="sidebar-link" th:classappend="${active} == 'cours' ? 'active'">
+                <i class="bi bi-book-fill"></i><span>Cours</span>
+            </a>
+            <a href="/inscriptions" class="sidebar-link" th:classappend="${active} == 'inscriptions' ? 'active'">
+                <i class="bi bi-person-check-fill"></i><span>Inscriptions</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="sidebar-user" sec:authorize="isAuthenticated()">
+                <div class="sidebar-user-avatar" th:text="${#strings.substring(#authentication.name,0,1).toUpperCase()}">U</div>
+                <div class="sidebar-user-info">
+                    <div class="name" sec:authentication="name">utilisateur</div>
+                    <div class="role" sec:authentication="authorities">rôle</div>
+                </div>
+            </div>
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="btn-logout">
+                    <i class="bi bi-box-arrow-right"></i> Déconnexion
+                </button>
+            </form>
+        </div>
+    </aside>
+</div>
+
+<!-- ============================================================
+     Fragment : container de toasts (à inclure une fois par page)
+     ============================================================ -->
+<div th:fragment="toasts" id="toast-container"></div>
+
+<!-- ============================================================
+     Fragment : messages flash cachés, lus par app.js pour générer les toasts
+     ============================================================ -->
+<div th:fragment="flash-messages" style="display:none;">
+    <div th:if="${succes}" id="flash-succes" th:attr="data-message=${succes}"></div>
+    <div th:if="${erreur}" id="flash-erreur" th:attr="data-message=${erreur}"></div>
+</div>
+
+<!-- ============================================================
+     Fragment : modal de confirmation de suppression générique
+     ============================================================ -->
+<div th:fragment="confirm-delete-modal" class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center p-3">
+            <div class="modal-body">
+                <div class="modal-icon-danger"><i class="bi bi-exclamation-triangle"></i></div>
+                <h5 class="mb-2">Confirmer la suppression</h5>
+                <p class="text-muted mb-0" id="confirmDeleteMessage">Cette action est irréversible.</p>
+            </div>
+            <div class="modal-footer border-0 justify-content-center pt-0">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-lg"></i> Annuler
+                </button>
+                <a href="#" id="confirmDeleteBtn" class="btn btn-danger text-white">
+                    <i class="bi bi-trash3"></i> Supprimer
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
