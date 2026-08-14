@@ -82,8 +82,3 @@ src/main/resources/
 database.sql         → script de création + données de test
 ```
 
-## Points à personnaliser avant la soutenance
-- Adapter le nom du package si besoin (actuellement `com.gestionscolaire`)
-- Ajouter un diagramme UML des classes dans le rapport technique (diagramme de classes
-  correspond directement aux entités JPA ci-dessus)
-- Prendre des captures d'écran de chaque fonctionnalité pour le rapport PDF
